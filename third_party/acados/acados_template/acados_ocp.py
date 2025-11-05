@@ -1,4 +1,4 @@
-# -*- coding: future_fstrings -*-
+# -*- coding: utf-8  -*-
 #
 # Copyright (c) The acados authors.
 #
@@ -3047,7 +3047,7 @@ class AcadosOcpOptions:
     @model_external_shared_lib_name.setter
     def model_external_shared_lib_name(self, model_external_shared_lib_name):
         if isinstance(model_external_shared_lib_name, str) :
-            if model_external_shared_lib_name[-3:] == '.so' : 
+            if model_external_shared_lib_name[-3:] == '.so' :
                 raise Exception('Invalid model_external_shared_lib_name value. Remove the .so extension.' \
             + '.\n\nYou have: ' + type(model_external_shared_lib_name) + '.\n\n')
             else :
