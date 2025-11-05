@@ -37,30 +37,3 @@ class TestParamsd:
     np.testing.assert_equal(p_init.shape, CarKalman.P_initial.shape)
     np.testing.assert_allclose(np.diagonal(p_init), msg.liveParameters.debugFilterState.std)
 
-  # TODO Remove this test after the support for old format is removed
-  def test_read_saved_params_old_format(self):
-    params = Params()
-
-    lr = migrate(LogReader(TEST_ROUTE), [migrate_carParams])
-    CP = next(m for m in lr if m.which() == "carParams").carParams
-
-    msg = get_random_live_parameters(CP)
-    params.put("LiveParameters", msg.liveParameters.to_dict())
-    params.put("CarParamsPrevRoute", CP.as_builder().to_bytes())
-    params.remove("LiveParametersV2")
-
-
-    sr, sf, offset, _ = retrieve_initial_vehicle_params(params, CP, replay=True, debug=True)
-    np.testing.assert_allclose(sr, msg.liveParameters.steerRatio)
-    np.testing.assert_allclose(sf, msg.liveParameters.stiffnessFactor)
-    np.testing.assert_allclose(offset, msg.liveParameters.angleOffsetAverageDeg)
-    assert params.get("LiveParametersV2") is not None
-
-  def test_read_saved_params_corrupted_old_format(self):
-    params = Params()
-    params.put("LiveParameters", {})
-    params.remove("LiveParametersV2")
-
-
-    assert params.get("LiveParameters") is None
-    assert params.get("LiveParametersV2") is None
